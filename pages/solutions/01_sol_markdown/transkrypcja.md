@@ -21,6 +21,7 @@ $$
 \right)
 =
 E\Psi
+
 $$
 
 - Energia:
