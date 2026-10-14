@@ -11,17 +11,7 @@ Przepisz mi to na tekst w markdown
 - Równanie Schrödingera:
 
 $$
--\frac{\hbar^2}{2m}
-\left(
-\frac{\partial^2 \Psi}{\partial x^2}
-+
-\frac{\partial^2 \Psi}{\partial y^2}
-+
-\frac{\partial^2 \Psi}{\partial z^2}
-\right)
-=
-E\Psi
-
+-\frac{\hbar^2}{2m}\nabla^2\Psi = E\Psi
 $$
 
 - Energia:
