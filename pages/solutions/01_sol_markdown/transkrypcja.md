@@ -13,15 +13,14 @@ Przepisz mi to na tekst w markdown
 $$
 -\frac{\hbar^2}{2m}
 \left(
-\frac{\partial^2}{\partial x^2}
+\frac{\partial^2 \Psi}{\partial x^2}
 +
-\frac{\partial^2}{\partial y^2}
+\frac{\partial^2 \Psi}{\partial y^2}
 +
-\frac{\partial^2}{\partial z^2}
+\frac{\partial^2 \Psi}{\partial z^2}
 \right)
-\Psi(x,y,z)
 =
-E\Psi(x,y,z)
+E\Psi
 $$
 
 - Energia:
