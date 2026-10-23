@@ -1,8 +1,11 @@
 # Transkrypcja 
-zrzut.png 
+![Notatka](zrzut.png)
 ## Prompt użyty do wygenerowania tekstu przez AI
+```text
 Przepisz mi to na tekst w markdown
+```
 # Finalna wersja notatki
+
 # 11. Co to są kropki kwantowe i jakie mają własności?
 
 - Struktura 0D.
@@ -32,4 +35,4 @@ $$
   - rozłożenie funkcji falowej $\Psi$ na część radialną i kątową (podobieństwo do zagadnienia atomu wodoru w mechanice kwantowej),
   - rozwiązanie: funkcje Bessela typu $J_{l+1/2}$.
 
-# 12. Porównać własności heterostruktur, drutów i kropek kwantowych.
+# 12. Porównać własności heterostruktur, drutów i kropek kwantowych.]
