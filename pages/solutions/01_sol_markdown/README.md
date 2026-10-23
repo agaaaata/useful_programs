@@ -48,7 +48,7 @@ print(x + y)
 
 ### Wzory matematyczne w tekście
 
-Przykładowe wzory to : $E=mc^2$ oraz $y=2x+1$.
+Przykładowe wzory to : $E=mc^2$ oraz $y=2x+1$ i $a=-b+3c$.
 
 ### wzory matematyczne osobne bloki
 
