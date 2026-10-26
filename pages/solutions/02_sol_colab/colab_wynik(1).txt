@@ -1,0 +1,2 @@
+Wynik działania 2 + 2 = 4
+Suma kwadratów od 1 do 100 = 338350
