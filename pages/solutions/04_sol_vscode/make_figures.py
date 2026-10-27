@@ -186,8 +186,8 @@ def main() -> None:
         "x [m]",
         "y [m]",
         [
-        ("bez oporu", [(sample[1], sample[2]) for sample in no_drag], "#1769aa"),
-        ("z oporem", [(sample[1], sample[2]) for sample in with_drag], "#d1495b"),
+            ("bez oporu", [(sample[1], sample[2]) for sample in no_drag], "#1769aa"),
+            ("z oporem", [(sample[1], sample[2]) for sample in with_drag], "#d1495b"),
         ],
     )
     chart(
