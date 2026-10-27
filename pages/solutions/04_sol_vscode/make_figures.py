@@ -7,8 +7,8 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 
-V0 = 53.0
-ANGLE_DEG = 77.0
+V0 = 36.0
+ANGLE_DEG = 76.0
 G = 9.81
 MASS = 0.145
 DIAMETER = 0.073
