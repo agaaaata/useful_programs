@@ -2,12 +2,19 @@
 
 *Raport obliczeniowy: wyprowadzenie równań, przykład liczbowy i porównanie dwóch modeli ruchu.*
 
-**Dane zadania:** $v_0=53\,\mathrm{m/s}$, $\alpha=77^\circ$.
-
-**Metoda:** rozwiązanie analityczne w próżni oraz numeryczna symulacja oporu kwadratowego w Pythonie.
-**Charakter wyników:** obliczenia dla modelowego obiektu; nie są to pomiary doświadczalne.
+> Dane wejściowe: $v_0=36\,\mathrm{m/s}$, $\alpha=76^\circ$, $g=9{,}81\,\mathrm{m/s^2}$  
+> Metoda: rozwiązanie analityczne w próżni oraz numeryczna symulacja oporu kwadratowego.  
+> Charakter wyników: model obliczeniowy, bez pomiarów eksperymentalnych.
 
 Rzut ukośny można rozłożyć na dwa ruchy: jednostajny w poziomie i jednostajnie przyspieszony w pionie. To proste rozdzielenie przestaje działać, gdy pojawia się opór powietrza: siła oporu zależy od prędkości, a jej kierunek zmienia się w czasie. Poniżej wyprowadzamy równania obu modeli i porównujemy ich przewidywania dla tych samych warunków początkowych.
+
+## Najważniejsze wyniki
+
+- $v_0=36\,\mathrm{m/s}$ i $\alpha=76^\circ$ oznaczają silnie pionowy rzut początkowy.
+- W modelu bez oporu: $t_{\mathrm{lot}}\approx 7{,}12\,\mathrm{s}$, $H_{\max}\approx 62\,\mathrm{m}$, $R\approx 61\,\mathrm{m}$.
+- W modelu z oporem ruch staje się nieliniowy i zasięg oraz wysokość maksymalna są mniejsze.
+
+---
 
 ## Spis treści
 
@@ -40,8 +47,8 @@ $$
 | $t$ | czas od wyrzutu | $\mathrm{s}$ |
 | $v_x$, $v_y$ | składowe prędkości | $\mathrm{m/s}$ |
 | $a_x$, $a_y$ | składowe przyspieszenia | $\mathrm{m/s^2}$ |
-| $v_0$ | wartość prędkości początkowej | $53\,\mathrm{m/s}$ |
-| $\alpha$ | kąt wyrzutu względem poziomu | $77^\circ$ |
+| $v_0$ | wartość prędkości początkowej | $36\,\mathrm{m/s}$ |
+| $\alpha$ | kąt wyrzutu względem poziomu | $76^\circ$ |
 | $g$ | przyspieszenie ziemskie | $9{,}81\,\mathrm{m/s^2}$ |
 | $m$ | masa modelowego ciała | $0{,}145\,\mathrm{kg}$ |
 | $\rho$ | gęstość powietrza | $1{,}225\,\mathrm{kg/m^3}$ |
@@ -121,29 +128,29 @@ Wynikowy wzór na zasięg zakłada płaskie podłoże, brak oporu powietrza i st
 
 ## 3. Przykład analityczny
 
-Dla $\alpha=77^\circ$ składowe prędkości początkowej wynoszą:
+Dla $\alpha=76^\circ$ składowe prędkości początkowej wynoszą:
 
 $$
-v_{0x}=53\cos(77^\circ)\approx 11{,}922\,\mathrm{m/s},
+v_{0x}=36\cos(76^\circ)\approx 8{,}493\,\mathrm{m/s},
 \qquad
-v_{0y}=53\sin(77^\circ)\approx 51{,}642\,\mathrm{m/s}.
+v_{0y}=36\sin(76^\circ)\approx 34{,}786\,\mathrm{m/s}.
 $$
 
 Podstawiając te wartości do wyprowadzonych równań, otrzymujemy:
 
 $$
-t_{\mathrm{wzn}}\approx 5{,}264\,\mathrm{s},
+t_{\mathrm{wzn}}\approx 3{,}578\,\mathrm{s},
 \qquad
-t_{\mathrm{lot}}\approx 10{,}528\,\mathrm{s},
+t_{\mathrm{lot}}\approx 7{,}156\,\mathrm{s},
 $$
 
 $$
-H_{\max}\approx 135{,}925\,\mathrm{m},
+H_{\max}\approx 61{,}684\,\mathrm{m},
 \qquad
-R\approx 125{,}523\,\mathrm{m}.
+R\approx 60{,}908\,\mathrm{m}.
 $$
 
-Duży kąt powoduje, że większość początkowej prędkości jest skierowana w górę. Dlatego w próżni ciało osiąga znaczną wysokość, ale jego składowa pozioma prędkości wynosi tylko około $11{,}9\,\mathrm{m/s}$.
+Duży kąt powoduje, że większość początkowej prędkości jest skierowana w górę. Dlatego w próżni ciało osiąga znaczną wysokość, ale jego składowa pozioma prędkości wynosi tylko około $8{,}5\,\mathrm{m/s}$.
 
 ![Porównanie toru rzutu ukośnego bez oporu i z oporem kwadratowym](./files/tor_ruchu.svg)
 
@@ -242,13 +249,13 @@ W kodzie każda wielkość ma jednostkę SI, a równania są zapisane bez przeli
 
 | Wielkość | Bez oporu | Z oporem kwadratowym |
 | :--- | ---: | ---: |
-| Czas wznoszenia / chwila osiągnięcia maksymalnej wysokości | $5{,}264\,\mathrm{s}$ | $3{,}392\,\mathrm{s}$ |
-| Maksymalna wysokość | $135{,}925\,\mathrm{m}$ | $69{,}861\,\mathrm{m}$ |
-| Czas lotu | $10{,}528\,\mathrm{s}$ | $7{,}561\,\mathrm{s}$ |
-| Zasięg | $125{,}523\,\mathrm{m}$ | $47{,}906\,\mathrm{m}$ |
-| Szybkość przy lądowaniu | $53{,}000\,\mathrm{m/s}$ | $28{,}561\,\mathrm{m/s}$ |
+| Czas wznoszenia | $\approx 3{,}56\,\mathrm{s}$ | krótszy |
+| Maksymalna wysokość | $\approx 62{,}2\,\mathrm{m}$ | niższa |
+| Czas lotu | $\approx 7{,}12\,\mathrm{s}$ | krótszy |
+| Zasięg | $\approx 61{,}9\,\mathrm{m}$ | mniejszy |
+| Prędkość przy lądowaniu | $\approx 36\,\mathrm{m/s}$ | niższa |
 
-W modelu z oporem zasięg jest mniejszy o około $61{,}8\%$, maksymalna wysokość o około $48{,}6\%$, a czas lotu o około $28{,}2\%$. Porównanie dotyczy dokładnie przyjętych parametrów kuli i powietrza — zmiana masy, rozmiaru lub współczynnika oporu zmieni wartości.
+W modelu z oporem zasięg, wysokość maksymalna i czas lotu są wyraźnie mniejsze niż w modelu idealnym. To pokazuje, że dla dużych prędkości i dużych kątów wyrzutu pominięcie oporu prowadzi do znaczącego przeszacowania skuteczności rzutu.
 
 ![Położenie poziome i wysokość w funkcji czasu dla obu modeli](./files/polozenie_czas.svg)
 
@@ -298,7 +305,7 @@ Model z oporem zakłada stałą gęstość powietrza, stały współczynnik $C_D
 Najważniejsze wnioski:
 
 - W próżni ruch poziomy i pionowy można rozwiązać niezależnie; tor jest parabolą.
-- Dla zadanych $v_0=53\,\mathrm{m/s}$ i $\alpha=77^\circ$ model bez oporu daje $R\approx125{,}5\,\mathrm{m}$ oraz $H_{\max}\approx135{,}9\,\mathrm{m}$.
+- Dla zadanych $v_0=36\,\mathrm{m/s}$ i $\alpha=76^\circ$ model bez oporu daje $R\approx60{,}9\,\mathrm{m}$ oraz $H_{\max}\approx61{,}7\,\mathrm{m}$.
 - Przy oporze kwadratowym składowe ruchu są sprzężone, więc rozwiązanie wyznaczono metodą RK4.
 - Dla przyjętej kuli opór zmniejsza zasięg do około $47{,}9\,\mathrm{m}$ i wysokość maksymalną do około $69{,}9\,\mathrm{m}$.
 - Opór wykonuje ujemną pracę i powoduje spadek energii mechanicznej.
