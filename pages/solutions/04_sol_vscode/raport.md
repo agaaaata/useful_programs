@@ -11,8 +11,8 @@ Rzut ukośny można rozłożyć na dwa ruchy: jednostajny w poziomie i jednostaj
 ## Najważniejsze wyniki
 
 - $v_0=36\,\mathrm{m/s}$ i $\alpha=76^\circ$ oznaczają silnie pionowy rzut początkowy.
-- W modelu bez oporu: $t_{\mathrm{lot}}\approx 7{,}12\,\mathrm{s}$, $H_{\max}\approx 62\,\mathrm{m}$, $R\approx 61\,\mathrm{m}$.
-- W modelu z oporem ruch staje się nieliniowy i zasięg oraz wysokość maksymalna są mniejsze.
+- W modelu bez oporu: $t_{\mathrm{lot}}\approx 7{,}121\,\mathrm{s}$, $H_{\max}\approx 62{,}189\,\mathrm{m}$, $R\approx 62{,}022\,\mathrm{m}$.
+- W modelu z oporem: $t_{\mathrm{lot}}\approx 5{,}861\,\mathrm{s}$, $H_{\max}\approx 42{,}082\,\mathrm{m}$, $R\approx 34{,}512\,\mathrm{m}$.
 
 ---
 
@@ -131,26 +131,26 @@ Wynikowy wzór na zasięg zakłada płaskie podłoże, brak oporu powietrza i st
 Dla $\alpha=76^\circ$ składowe prędkości początkowej wynoszą:
 
 $$
-v_{0x}=36\cos(76^\circ)\approx 8{,}493\,\mathrm{m/s},
+v_{0x}=36\cos(76^\circ)\approx 8{,}709\,\mathrm{m/s},
 \qquad
-v_{0y}=36\sin(76^\circ)\approx 34{,}786\,\mathrm{m/s}.
+v_{0y}=36\sin(76^\circ)\approx 34{,}931\,\mathrm{m/s}.
 $$
 
 Podstawiając te wartości do wyprowadzonych równań, otrzymujemy:
 
 $$
-t_{\mathrm{wzn}}\approx 3{,}578\,\mathrm{s},
+t_{\mathrm{wzn}}\approx 3{,}561\,\mathrm{s},
 \qquad
-t_{\mathrm{lot}}\approx 7{,}156\,\mathrm{s},
+t_{\mathrm{lot}}\approx 7{,}121\,\mathrm{s},
 $$
 
 $$
-H_{\max}\approx 61{,}684\,\mathrm{m},
+H_{\max}\approx 62{,}189\,\mathrm{m},
 \qquad
-R\approx 60{,}908\,\mathrm{m}.
+R\approx 62{,}022\,\mathrm{m}.
 $$
 
-Duży kąt powoduje, że większość początkowej prędkości jest skierowana w górę. Dlatego w próżni ciało osiąga znaczną wysokość, ale jego składowa pozioma prędkości wynosi tylko około $8{,}5\,\mathrm{m/s}$.
+Duży kąt powoduje, że większość początkowej prędkości jest skierowana w górę. Dlatego w próżni ciało osiąga znaczną wysokość, ale jego składowa pozioma prędkości wynosi tylko około $8{,}71\,\mathrm{m/s}$.
 
 ![Porównanie toru rzutu ukośnego bez oporu i z oporem kwadratowym](./files/tor_ruchu.svg)
 
@@ -229,16 +229,23 @@ Symulację kończy pierwsze przecięcie z podłożem po wyrzucie, gdy $y$ spada 
 Rdzeń obliczeń w załączonym [skrypcie `make_figures.py`](./make_figures.py) wygląda następująco:
 
 ```python
-def derivative(state, k):
+G = 9.81
+
+def derivative(state, drag_factor):
     _, _, vx, vy = state
     speed = math.hypot(vx, vy)
-    return (vx, vy, -k * speed * vx, -g - k * speed * vy)
+    return (
+        vx,
+        vy,
+        -drag_factor * speed * vx,
+        -G - drag_factor * speed * vy,
+    )
 
-def rk4_step(state, step, k):
-    k1 = derivative(state, k)
-    k2 = derivative(add_scaled(state, k1, step / 2), k)
-    k3 = derivative(add_scaled(state, k2, step / 2), k)
-    k4 = derivative(add_scaled(state, k3, step), k)
+def rk4_step(state, step, drag_factor):
+    k1 = derivative(state, drag_factor)
+    k2 = derivative(add_scaled(state, k1, step / 2), drag_factor)
+    k3 = derivative(add_scaled(state, k2, step / 2), drag_factor)
+    k4 = derivative(add_scaled(state, k3, step), drag_factor)
     return tuple(value + step * (a + 2*b + 2*c + d) / 6
                  for value, a, b, c, d in zip(state, k1, k2, k3, k4))
 ```
@@ -249,13 +256,13 @@ W kodzie każda wielkość ma jednostkę SI, a równania są zapisane bez przeli
 
 | Wielkość | Bez oporu | Z oporem kwadratowym |
 | :--- | ---: | ---: |
-| Czas wznoszenia | $\approx 3{,}56\,\mathrm{s}$ | krótszy |
-| Maksymalna wysokość | $\approx 62{,}2\,\mathrm{m}$ | niższa |
-| Czas lotu | $\approx 7{,}12\,\mathrm{s}$ | krótszy |
-| Zasięg | $\approx 61{,}9\,\mathrm{m}$ | mniejszy |
-| Prędkość przy lądowaniu | $\approx 36\,\mathrm{m/s}$ | niższa |
+| Czas wznoszenia | $\approx 3{,}561\,\mathrm{s}$ | $\approx 2{,}743\,\mathrm{s}$ |
+| Maksymalna wysokość | $\approx 62{,}189\,\mathrm{m}$ | $\approx 42{,}082\,\mathrm{m}$ |
+| Czas lotu | $\approx 7{,}121\,\mathrm{s}$ | $\approx 5{,}861\,\mathrm{s}$ |
+| Zasięg | $\approx 62{,}022\,\mathrm{m}$ | $\approx 34{,}512\,\mathrm{m}$ |
+| Prędkość przy lądowaniu | $\approx 36{,}000\,\mathrm{m/s}$ | $\approx 24{,}585\,\mathrm{m/s}$ |
 
-W modelu z oporem zasięg, wysokość maksymalna i czas lotu są wyraźnie mniejsze niż w modelu idealnym. To pokazuje, że dla dużych prędkości i dużych kątów wyrzutu pominięcie oporu prowadzi do znaczącego przeszacowania skuteczności rzutu.
+W modelu z oporem zasięg, wysokość maksymalna i czas lotu są wyraźnie mniejsze niż w modelu idealnym. To pokazuje, że dla przyjętych parametrów pominięcie oporu prowadzi do znaczącego przeszacowania zasięgu i wysokości rzutu.
 
 ![Położenie poziome i wysokość w funkcji czasu dla obu modeli](./files/polozenie_czas.svg)
 
@@ -290,7 +297,99 @@ Znak ujemny oznacza, że energia mechaniczna jest rozpraszana, głównie w posta
 
 ## 7. Odtworzenie wykresów
 
-Pliki SVG zostały wygenerowane z dołączonego kodu i są zapisane w katalogu [`files/`](./files/). Aby ponownie obliczyć wyniki i odtworzyć wszystkie wykresy w lokalnym VS Code:
+Pliki SVG zostały wygenerowane z dołączonego kodu i są zapisane w katalogu [`files/`](./files/). Skrypt korzysta z parametrów SI i tworzy dane dla obu modeli z tymi samymi warunkami początkowymi. Poniższe fragmenty pokazują parametry, obliczenia wyników oraz wywołania rysujące wszystkie cztery wykresy. Funkcja `chart()` przekształca przekazane serie w pliki SVG; jej pełna implementacja znajduje się w [skrypcie `make_figures.py`](./make_figures.py).
+
+### 7.1. Parametry i wyniki
+
+```python
+V0 = 36.0
+ANGLE_DEG = 76.0
+G = 9.81
+MASS = 0.145
+DIAMETER = 0.073
+DRAG_COEFFICIENT = 0.47
+AIR_DENSITY = 1.225
+TIME_STEP = 0.002
+
+area = math.pi * DIAMETER**2 / 4
+drag_factor = AIR_DENSITY * DRAG_COEFFICIENT * area / (2 * MASS)
+no_drag = simulate(0.0)
+with_drag = simulate(drag_factor)
+
+def metrics(samples):
+    apex_index = next(
+        index
+        for index in range(len(samples) - 1)
+        if samples[index][4] >= 0 and samples[index + 1][4] < 0
+    )
+    before_apex, after_apex = samples[apex_index : apex_index + 2]
+    fraction = before_apex[4] / (before_apex[4] - after_apex[4])
+    apex_time = before_apex[0] + fraction * (after_apex[0] - before_apex[0])
+    apex_height = before_apex[2] + fraction * (after_apex[2] - before_apex[2])
+    landing = samples[-1]
+    landing_speed = math.hypot(landing[3], landing[4])
+    return apex_time, apex_height, landing[0], landing[1], landing_speed
+```
+
+W każdym wierszu trajektorii zapisano kolejno czas, położenie $x$, położenie $y$, składową $v_x$ i składową $v_y$. Kod interpoluje moment osiągnięcia wierzchołka oraz punkt lądowania między krokami integracji, dlatego wyniki w tabeli odpowiadają liczbom wypisywanym przez skrypt.
+
+### 7.2. Rysowanie wykresów
+
+```python
+def position_y(samples):
+    return [(sample[0], sample[2]) for sample in samples]
+
+def velocity_x(samples):
+    return [(sample[0], sample[3]) for sample in samples]
+
+def velocity_y(samples):
+    return [(sample[0], sample[4]) for sample in samples]
+
+def energy(samples):
+    return [
+        (
+            sample[0],
+            MASS * (sample[3]**2 + sample[4]**2) / 2
+            + MASS * G * sample[2],
+        )
+        for sample in samples
+    ]
+
+chart(
+    "tor_ruchu.svg", "Tor ruchu: próżnia i opór kwadratowy", "x [m]", "y [m]",
+    [
+        ("bez oporu", [(s[1], s[2]) for s in no_drag], "#1769aa"),
+        ("z oporem", [(s[1], s[2]) for s in with_drag], "#d1495b"),
+    ],
+)
+chart(
+    "polozenie_czas.svg", "Położenie w funkcji czasu", "t [s]", "położenie [m]",
+    [
+        ("x, bez oporu", [(s[0], s[1]) for s in no_drag], "#1769aa"),
+        ("y, bez oporu", position_y(no_drag), "#56a3d9"),
+        ("x, z oporem", [(s[0], s[1]) for s in with_drag], "#d1495b"),
+        ("y, z oporem", position_y(with_drag), "#f29e4c"),
+    ],
+)
+chart(
+    "predkosc_czas.svg", "Składowe prędkości w funkcji czasu", "t [s]", "prędkość [m/s]",
+    [
+        ("vx, bez oporu", velocity_x(no_drag), "#1769aa"),
+        ("vy, bez oporu", velocity_y(no_drag), "#56a3d9"),
+        ("vx, z oporem", velocity_x(with_drag), "#d1495b"),
+        ("vy, z oporem", velocity_y(with_drag), "#f29e4c"),
+    ],
+)
+chart(
+    "energia_czas.svg", "Energia mechaniczna w funkcji czasu", "t [s]", "energia [J]",
+    [
+        ("bez oporu", energy(no_drag), "#1769aa"),
+        ("z oporem", energy(with_drag), "#d1495b"),
+    ],
+)
+```
+
+Aby ponownie obliczyć wyniki i odtworzyć wszystkie wykresy w lokalnym VS Code:
 
 1. Otwórz terminal w katalogu `pages/solutions/04_sol_vscode/`.
 2. Uruchom `python3 make_figures.py` (w Windows można użyć `python make_figures.py`).
@@ -305,9 +404,9 @@ Model z oporem zakłada stałą gęstość powietrza, stały współczynnik $C_D
 Najważniejsze wnioski:
 
 - W próżni ruch poziomy i pionowy można rozwiązać niezależnie; tor jest parabolą.
-- Dla zadanych $v_0=36\,\mathrm{m/s}$ i $\alpha=76^\circ$ model bez oporu daje $R\approx60{,}9\,\mathrm{m}$ oraz $H_{\max}\approx61{,}7\,\mathrm{m}$.
+- Dla zadanych $v_0=36\,\mathrm{m/s}$ i $\alpha=76^\circ$ model bez oporu daje $R\approx62{,}022\,\mathrm{m}$ oraz $H_{\max}\approx62{,}189\,\mathrm{m}$.
 - Przy oporze kwadratowym składowe ruchu są sprzężone, więc rozwiązanie wyznaczono metodą RK4.
-- Dla przyjętej kuli opór zmniejsza zasięg do około $47{,}9\,\mathrm{m}$ i wysokość maksymalną do około $69{,}9\,\mathrm{m}$.
+- Dla przyjętej kuli opór zmniejsza czas lotu do $5{,}861\,\mathrm{s}$, zasięg do $34{,}512\,\mathrm{m}$ i wysokość maksymalną do $42{,}082\,\mathrm{m}$.
 - Opór wykonuje ujemną pracę i powoduje spadek energii mechanicznej.
 
-Wyniki pokazują, że pominięcie oporu przy dużej prędkości może prowadzić do znacznego przeszacowania zasięgu. Jednocześnie liczby dla modelu z oporem należy interpretować razem z przyjętymi parametrami ciała i powietrza.
+Wyniki pokazują, że pominięcie oporu w tym przykładzie zawyża przewidywany zasięg o około $27{,}510\,\mathrm{m}$ i wysokość maksymalną o około $20{,}107\,\mathrm{m}$. Liczby dla modelu z oporem należy interpretować razem z przyjętymi parametrami ciała i powietrza.

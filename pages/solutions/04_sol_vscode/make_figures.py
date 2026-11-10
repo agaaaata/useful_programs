@@ -225,17 +225,29 @@ def main() -> None:
         ],
     )
 
-    vacuum_time = 2 * V0 * math.sin(math.radians(ANGLE_DEG)) / G
-    vacuum_range = V0 * math.cos(math.radians(ANGLE_DEG)) * vacuum_time
-    vacuum_height = (V0 * math.sin(math.radians(ANGLE_DEG))) ** 2 / (2 * G)
+    def metrics(samples: list[tuple[float, ...]]) -> tuple[float, ...]:
+        apex_index = next(
+            index
+            for index in range(len(samples) - 1)
+            if samples[index][4] >= 0 and samples[index + 1][4] < 0
+        )
+        before_apex, after_apex = samples[apex_index : apex_index + 2]
+        fraction = before_apex[4] / (before_apex[4] - after_apex[4])
+        apex_time = before_apex[0] + fraction * (after_apex[0] - before_apex[0])
+        apex_height = before_apex[2] + fraction * (after_apex[2] - before_apex[2])
+        landing = samples[-1]
+        landing_speed = math.hypot(landing[3], landing[4])
+        return apex_time, apex_height, landing[0], landing[1], landing_speed
+
     print(f"Area: {area:.6f} m^2")
     print(f"Drag factor: {drag_factor:.8f} 1/m")
-    print(f"No-drag flight time: {vacuum_time:.4f} s")
-    print(f"No-drag range: {vacuum_range:.4f} m")
-    print(f"No-drag maximum height: {vacuum_height:.4f} m")
-    print(f"Drag flight time: {with_drag[-1][0]:.4f} s")
-    print(f"Drag range: {with_drag[-1][1]:.4f} m")
-    print(f"Drag maximum height: {max(sample[2] for sample in with_drag):.4f} m")
+    for label, samples in (("No drag", no_drag), ("With drag", with_drag)):
+        apex_time, height, flight_time, horizontal_range, landing_speed = metrics(samples)
+        print(f"{label} ascent time: {apex_time:.4f} s")
+        print(f"{label} maximum height: {height:.4f} m")
+        print(f"{label} flight time: {flight_time:.4f} s")
+        print(f"{label} range: {horizontal_range:.4f} m")
+        print(f"{label} landing speed: {landing_speed:.4f} m/s")
     print(f"Figures saved in: {OUTPUT_DIR}")
 
 
